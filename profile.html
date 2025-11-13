@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Nona Beauty</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="english">
+    <!-- Header (same as index.html) -->
+
+    <main class="profile-page">
+        <div class="container">
+            <div class="profile-header">
+                <h1>My Account</h1>
+                <p>Manage your personal information and orders</p>
+            </div>
+
+            <div class="profile-layout">
+                <!-- Sidebar Navigation -->
+                <aside class="profile-sidebar">
+                    <nav class="profile-nav">
+                        <ul>
+                            <li class="nav-item active">
+                                <a href="#personal-info" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    Personal Information
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#orders" class="nav-link">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    My Orders
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#addresses" class="nav-link">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Shipping Addresses
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#wishlist" class="nav-link">
+                                    <i class="fas fa-heart"></i>
+                                    My Wishlist
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#security" class="nav-link">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Security
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="profile-content">
+                    <!-- Personal Information Section -->
+                    <section id="personal-info" class="profile-section active">
+                        <h2>Personal Information</h2>
+                        <form class="profile-form" id="personalInfoForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </section>
+
+                    <!-- Orders Section -->
+                    <section id="orders" class="profile-section">
+                        <h2>My Orders</h2>
+                        <div class="orders-list" id="ordersList">
+                            <!-- Orders will be loaded by JavaScript -->
+                        </div>
+                    </section>
+
+                    <!-- Addresses Section -->
+                    <section id="addresses" class="profile-section">
+                        <h2>Shipping Addresses</h2>
+                        <div class="addresses-list" id="addressesList">
+                            <!-- Addresses will be loaded by JavaScript -->
+                        </div>
+                        <button class="btn btn-primary" id="addAddressBtn">
+                            <i class="fas fa-plus"></i>
+                            Add New Address
+                        </button>
+                    </section>
+
+                    <!-- Other sections (Wishlist, Security) -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (same as index.html) -->
+
+    <script src="assets/js/profile.js"></script>
+</body>
+</html>
