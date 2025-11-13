@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offers - Nona Beauty</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="english">
+    <!-- Header (same as index.html) -->
+
+    <main class="offers-page">
+        <!-- Hero Section -->
+        <section class="page-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Special Offers</h1>
+                    <p>Exclusive deals and discounts on your favorite beauty products</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Offers -->
+        <section class="featured-offers">
+            <div class="container">
+                <h2 class="section-title">Featured Deals</h2>
+                <div class="offers-banner">
+                    <div class="offer-banner-card mega-deal">
+                        <div class="banner-content">
+                            <span class="banner-badge">Mega Deal</span>
+                            <h3>Up to 50% OFF</h3>
+                            <p>On selected skincare products</p>
+                            <a href="#skincare-offers" class="btn btn-primary">Shop Now</a>
+                        </div>
+                        <div class="banner-image">
+                            <img src="assets/images/offers/mega-deal.jpg" alt="Mega Deal">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Offers -->
+        <section class="current-offers">
+            <div class="container">
+                <div class="offers-header">
+                    <h2>Current Offers</h2>
+                    <div class="offers-filter">
+                        <button class="filter-btn active" data-filter="all">All Offers</button>
+                        <button class="filter-btn" data-filter="skincare">Skincare</button>
+                        <button class="filter-btn" data-filter="haircare">Haircare</button>
+                        <button class="filter-btn" data-filter="perfumes">Perfumes</button>
+                    </div>
+                </div>
+
+                <div class="offers-grid" id="offersGrid">
+                    <!-- Offers will be loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Limited Time Offers -->
+        <section class="limited-offers">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Limited Time Offers</h2>
+                    <div class="countdown-timer" id="countdownTimer">
+                        <div class="timer-item">
+                            <span class="timer-number" id="days">00</span>
+                            <span class="timer-label">Days</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number" id="hours">00</span>
+                            <span class="timer-label">Hours</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number" id="minutes">00</span>
+                            <span class="timer-label">Minutes</span>
+                        </div>
+                        <div class="timer-item">
+                            <span class="timer-number" id="seconds">00</span>
+                            <span class="timer-label">Seconds</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="limited-products-grid">
+                    <!-- Limited time products will be loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bundle Deals -->
+        <section class="bundle-deals">
+            <div class="container">
+                <h2 class="section-title">Bundle Deals</h2>
+                <div class="bundles-grid">
+                    <div class="bundle-card">
+                        <div class="bundle-image">
+                            <img src="assets/images/offers/skincare-bundle.jpg" alt="Skincare Bundle">
+                        </div>
+                        <div class="bundle-content">
+                            <h3>Complete Skincare Routine</h3>
+                            <p class="bundle-description">Cleanser, toner, serum, and moisturizer - everything you need for perfect skin</p>
+                            <div class="bundle-price">
+                                <span class="current-price">$89.99</span>
+                                <span class="original-price">$120.00</span>
+                                <span class="discount">25% OFF</span>
+                            </div>
+                            <ul class="bundle-includes">
+                                <li><i class="fas fa-check"></i> Gentle Cleanser 200ml</li>
+                                <li><i class="fas fa-check"></i> Hydrating Toner 150ml</li>
+                                <li><i class="fas fa-check"></i> Vitamin C Serum 30ml</li>
+                                <li><i class="fas fa-check"></i> Daily Moisturizer 50ml</li>
+                            </ul>
+                            <button class="btn btn-primary btn-full">Add Bundle to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="bundle-card">
+                        <div class="bundle-image">
+                            <img src="assets/images/offers/haircare-bundle.jpg" alt="Haircare Bundle">
+                        </div>
+                        <div class="bundle-content">
+                            <h3>Luxury Haircare Set</h3>
+                            <p class="bundle-description">Transform your hair with our premium haircare collection</p>
+                            <div class="bundle-price">
+                                <span class="current-price">$65.99</span>
+                                <span class="original-price">$85.00</span>
+                                <span class="discount">22% OFF</span>
+                            </div>
+                            <ul class="bundle-includes">
+                                <li><i class="fas fa-check"></i> Nourishing Shampoo 400ml</li>
+                                <li><i class="fas fa-check"></i> Repairing Conditioner 400ml</li>
+                                <li><i class="fas fa-check"></i> Hair Mask 300ml</li>
+                                <li><i class="fas fa-check"></i> Argan Oil 100ml</li>
+                            </ul>
+                            <button class="btn btn-primary btn-full">Add Bundle to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="newsletter-offer">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Get Exclusive Offers</h2>
+                    <p>Subscribe to our newsletter and be the first to know about new products and special promotions</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <div class="newsletter-input">
+                            <input type="email" placeholder="Enter your email address" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </div>
+                        <p class="newsletter-note">By subscribing, you agree to our Privacy Policy</p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (same as index.html) -->
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/offers.js"></script>
+</body>
+</html>
