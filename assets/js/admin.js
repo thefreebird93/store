@@ -546,4 +546,29 @@ class AdminPanel {
             padding: 15px 25px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 300
+            z-index: 3000;
+            transition: all 0.3s ease;
+        `;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+}
+
+// Initialize admin panel when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    window.adminPanel = new AdminPanel();
+});
