@@ -9,7 +9,70 @@
 </head>
 <body class="english">
     <!-- Header (same as index.html) -->
+<!-- Loading Screen -->
+<div class="loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+</div>
 
+<!-- Header -->
+<header>
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">NB</div>
+                <div class="logo-text">
+                    <h1>Nona Beauty</h1>
+                    <p>Your Beauty Passion</p>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="products.html" class="nav-link">Products</a></li>
+                    <li><a href="offers.html" class="nav-link">Offers</a></li>
+                    <li><a href="tips.html" class="nav-link">Beauty Tips</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="user-actions">
+                    <a href="login.html" class="auth-btn login-btn" id="loginBtn">Login</a>
+                    <a href="login.html" class="auth-btn register-btn" id="registerBtn">Register</a>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-profile-btn">
+                            <i class="fas fa-user"></i>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown">
+                            <a href="profile.html"><i class="fas fa-user-circle"></i> My Profile</a>
+                            <a href="profile.html#orders"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                            <a href="profile.html#addresses"><i class="fas fa-map-marker-alt"></i> Shipping Addresses</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-icons">
+                    <div class="wishlist-icon" id="wishlistIcon">
+                        <i class="far fa-heart"></i>
+                        <span class="wishlist-count">0</span>
+                    </div>
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
     <main class="about-page">
         <!-- Hero Section -->
         <section class="page-hero">
@@ -148,8 +211,48 @@
         </section>
     </main>
 
-    <!-- Footer (same as index.html) -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Nona Beauty</h3>
+                <p>Your trusted partner in beauty and skincare. We provide high-quality products for your beauty journey.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="offers.html">Offers</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Customer Service</h3>
+                <ul class="footer-links">
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Info</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> info@nonabeauty.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Beauty Street, NY 10001</p>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Nona Beauty. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
-    <script src="assets/js/main.js"></script>
+<li><a href="about.html" class="nav-link active">About Us</a></li>
 </body>
 </html>
