@@ -1,4 +1,4 @@
-// Main JavaScript file for Nona Beauty - Updated with EGP and Auto Offers
+// Main JavaScript file for Nona Beauty - Complete and Enhanced
 class NonaBeautyApp {
     constructor() {
         this.currentUser = null;
@@ -14,8 +14,9 @@ class NonaBeautyApp {
         this.loadCart();
         this.loadWishlist();
         this.setupEventListeners();
-        this.updateUI();
         this.setupMobileMenu();
+        this.updateUI();
+        this.checkAuthentication();
     }
 
     // إدارة المستخدم
@@ -24,9 +25,27 @@ class NonaBeautyApp {
             const userData = localStorage.getItem('nonaBeautyUser');
             if (userData) {
                 this.currentUser = JSON.parse(userData);
+                console.log('User loaded:', this.currentUser.name);
             }
         } catch (error) {
             console.error('Error loading user data:', error);
+        }
+    }
+
+    checkAuthentication() {
+        // حماية الصفحات التي تتطلب تسجيل دخول
+        const protectedPages = ['profile.html', 'admin.html'];
+        const currentPage = window.location.pathname.split('/').pop();
+        
+        if (protectedPages.includes(currentPage) && !this.currentUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // منع الوصول إلى admin إذا لم يكن المستخدم مسؤولاً
+        if (currentPage === 'admin.html' && this.currentUser && this.currentUser.role !== 'admin') {
+            window.location.href = 'index.html';
+            return;
         }
     }
 
@@ -55,6 +74,17 @@ class NonaBeautyApp {
         return this.products.filter(product => product.discount && product.discount > 0);
     }
 
+    // الحصول على المنتجات المميزة
+    getFeaturedProducts() {
+        return this.products.filter(product => product.featured);
+    }
+
+    // الحصول على المنتجات حسب الفئة
+    getProductsByCategory(category) {
+        if (category === 'all') return this.products;
+        return this.products.filter(product => product.category === category);
+    }
+
     // إدارة السلة
     loadCart() {
         try {
@@ -80,13 +110,42 @@ class NonaBeautyApp {
         } else {
             this.cart.push({
                 ...product,
-                quantity: quantity
+                quantity: quantity,
+                addedAt: new Date().toISOString()
             });
         }
         
         this.saveCart();
         this.updateCartUI();
         this.showNotification('Product added to cart!', 'success');
+    }
+
+    removeFromCart(productId) {
+        this.cart = this.cart.filter(item => item.id !== productId);
+        this.saveCart();
+        this.updateCartUI();
+        this.showNotification('Product removed from cart', 'info');
+    }
+
+    updateQuantity(productId, newQuantity) {
+        const item = this.cart.find(item => item.id === productId);
+        if (item) {
+            if (newQuantity <= 0) {
+                this.removeFromCart(productId);
+            } else {
+                item.quantity = newQuantity;
+                this.saveCart();
+                this.updateCartUI();
+            }
+        }
+    }
+
+    getCartTotal() {
+        return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    getCartItemsCount() {
+        return this.cart.reduce((total, item) => total + item.quantity, 0);
     }
 
     // إدارة قائمة الأمنيات
@@ -121,11 +180,16 @@ class NonaBeautyApp {
         this.updateWishlistUI();
     }
 
+    isInWishlist(productId) {
+        return this.wishlist.some(item => item.id === productId);
+    }
+
     // تحديث واجهة المستخدم
     updateUI() {
         this.updateUserUI();
         this.updateCartUI();
         this.updateWishlistUI();
+        this.updateNavigation();
     }
 
     updateUserUI() {
@@ -137,18 +201,21 @@ class NonaBeautyApp {
         if (this.currentUser && userMenu) {
             if (loginBtn) loginBtn.style.display = 'none';
             if (registerBtn) registerBtn.style.display = 'none';
-            userMenu.style.display = 'block';
-            if (userName) userName.textContent = this.currentUser.name;
+            userMenu.style.display = 'flex';
+            if (userName) userName.textContent = this.currentUser.name.split(' ')[0]; // الاسم الأول فقط
         } else if (userMenu) {
             userMenu.style.display = 'none';
+            if (loginBtn) loginBtn.style.display = 'block';
+            if (registerBtn) registerBtn.style.display = 'block';
         }
     }
 
     updateCartUI() {
         const cartCount = document.querySelector('.cart-count');
         if (cartCount) {
-            const totalItems = this.cart.reduce((total, item) => total + item.quantity, 0);
+            const totalItems = this.getCartItemsCount();
             cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
         }
     }
 
@@ -156,6 +223,24 @@ class NonaBeautyApp {
         const wishlistCount = document.querySelector('.wishlist-count');
         if (wishlistCount) {
             wishlistCount.textContent = this.wishlist.length;
+            wishlistCount.style.display = this.wishlist.length > 0 ? 'flex' : 'none';
+        }
+    }
+
+    updateNavigation() {
+        // تحديث الروابط النشطة
+        const currentPage = window.location.pathname.split('/').pop();
+        document.querySelectorAll('nav a').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // إظهار/إخفاء رابط المدير
+        const adminLink = document.getElementById('adminLink');
+        if (adminLink) {
+            adminLink.style.display = this.currentUser && this.currentUser.role === 'admin' ? 'block' : 'none';
         }
     }
 
@@ -174,7 +259,7 @@ class NonaBeautyApp {
         const cartIcon = document.getElementById('cartIcon');
         if (cartIcon) {
             cartIcon.addEventListener('click', () => {
-                this.showNotification('Cart functionality will be implemented', 'info');
+                this.toggleCartSidebar();
             });
         }
 
@@ -182,9 +267,21 @@ class NonaBeautyApp {
         const wishlistIcon = document.getElementById('wishlistIcon');
         if (wishlistIcon) {
             wishlistIcon.addEventListener('click', () => {
-                window.location.href = 'wishlist.html';
+                window.location.href = 'profile.html#wishlist';
             });
         }
+
+        // إغلاق السلة عند النقر خارجها
+        document.addEventListener('click', (e) => {
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartIcon = document.getElementById('cartIcon');
+            
+            if (cartSidebar && cartSidebar.classList.contains('open') && 
+                !cartSidebar.contains(e.target) && 
+                !cartIcon.contains(e.target)) {
+                this.closeCartSidebar();
+            }
+        });
     }
 
     // القائمة المتنقلة
@@ -195,14 +292,48 @@ class NonaBeautyApp {
         if (mobileMenuBtn && mainNav) {
             mobileMenuBtn.addEventListener('click', () => {
                 mainNav.classList.toggle('active');
+                mobileMenuBtn.innerHTML = mainNav.classList.contains('active') ? 
+                    '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
             });
 
             // إغلاق القائمة عند النقر على رابط
             mainNav.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
                     mainNav.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 });
             });
+
+            // إغلاق القائمة عند تغيير حجم النافذة
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        }
+    }
+
+    // سلة التسوق الجانبية
+    toggleCartSidebar() {
+        const cartSidebar = document.getElementById('cartSidebar');
+        const overlay = document.getElementById('overlay');
+        
+        if (cartSidebar && overlay) {
+            cartSidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = cartSidebar.classList.contains('open') ? 'hidden' : '';
+        }
+    }
+
+    closeCartSidebar() {
+        const cartSidebar = document.getElementById('cartSidebar');
+        const overlay = document.getElementById('overlay');
+        
+        if (cartSidebar && overlay) {
+            cartSidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
     }
 
@@ -211,13 +342,25 @@ class NonaBeautyApp {
         localStorage.removeItem('nonaBeautyUser');
         this.updateUI();
         this.showNotification('Logged out successfully', 'info');
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
+        
+        // إذا كنا في صفحة محمية، نعيد التوجيه للصفحة الرئيسية
+        const protectedPages = ['profile.html', 'admin.html'];
+        const currentPage = window.location.pathname.split('/').pop();
+        
+        if (protectedPages.includes(currentPage)) {
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
     }
 
     // الإشعارات
     showNotification(message, type = 'info') {
+        // إزالة أي إشعارات سابقة
+        document.querySelectorAll('.notification').forEach(notification => {
+            notification.remove();
+        });
+
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
@@ -225,7 +368,7 @@ class NonaBeautyApp {
             <span>${message}</span>
         `;
 
-        // إضافة الأنماط إذا لم تكن موجودة في CSS
+        // إضافة الأنماط
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -240,6 +383,7 @@ class NonaBeautyApp {
             display: flex;
             align-items: center;
             gap: 10px;
+            max-width: 400px;
         `;
 
         document.body.appendChild(notification);
@@ -290,6 +434,7 @@ class NonaBeautyApp {
                 rating: 4.5,
                 reviewCount: 128,
                 featured: true,
+                inStock: true,
                 tags: ['hair', 'shampoo', 'sulfate-free']
             },
             {
@@ -304,6 +449,7 @@ class NonaBeautyApp {
                 rating: 4.8,
                 reviewCount: 89,
                 featured: true,
+                inStock: true,
                 tags: ['face', 'serum', 'hydrating']
             },
             {
@@ -316,6 +462,7 @@ class NonaBeautyApp {
                 rating: 4.3,
                 reviewCount: 67,
                 featured: false,
+                inStock: true,
                 tags: ['body', 'lotion', 'moisturizing']
             },
             {
@@ -330,6 +477,7 @@ class NonaBeautyApp {
                 rating: 4.6,
                 reviewCount: 45,
                 featured: false,
+                inStock: true,
                 tags: ['lips', 'balm', 'moisturizing']
             },
             {
@@ -344,6 +492,7 @@ class NonaBeautyApp {
                 rating: 4.7,
                 reviewCount: 156,
                 featured: true,
+                inStock: true,
                 tags: ['perfume', 'floral', 'fragrance']
             },
             {
@@ -358,6 +507,7 @@ class NonaBeautyApp {
                 rating: 4.4,
                 reviewCount: 92,
                 featured: false,
+                inStock: true,
                 tags: ['hair', 'oil', 'growth']
             },
             {
@@ -370,6 +520,7 @@ class NonaBeautyApp {
                 rating: 4.6,
                 reviewCount: 78,
                 featured: false,
+                inStock: true,
                 tags: ['face', 'cream', 'anti-aging']
             },
             {
@@ -384,6 +535,7 @@ class NonaBeautyApp {
                 rating: 4.2,
                 reviewCount: 34,
                 featured: false,
+                inStock: true,
                 tags: ['body', 'scrub', 'exfoliating']
             }
         ];
@@ -403,9 +555,8 @@ class NonaBeautyApp {
             <span class="original-price">${this.formatPrice(product.originalPrice)}</span>
         ` : '';
 
-        const discountPercent = product.discount ? `
-            <span class="discount-percent">${product.discount}% OFF</span>
-        ` : '';
+        const isInWishlist = this.isInWishlist(product.id);
+        const wishlistIcon = isInWishlist ? 'fas' : 'far';
 
         // إنشاء نجوم التقييم
         let ratingStars = '';
@@ -426,7 +577,7 @@ class NonaBeautyApp {
             <div class="product-card" data-product-id="${product.id}">
                 ${discountBadge}
                 <button class="wishlist-btn" data-product-id="${product.id}">
-                    <i class="far fa-heart"></i>
+                    <i class="${wishlistIcon} fa-heart"></i>
                 </button>
                 <div class="product-image">
                     <img src="${product.image}" alt="${product.name}" 
@@ -441,7 +592,6 @@ class NonaBeautyApp {
                     <div class="product-price">
                         <span class="current-price">${this.formatPrice(product.price)}</span>
                         ${originalPrice}
-                        ${discountPercent}
                     </div>
                     <div class="product-actions">
                         <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
@@ -475,13 +625,9 @@ class NonaBeautyApp {
                 const productId = e.target.closest('.view-details').dataset.productId;
                 const product = this.products.find(p => p.id === productId);
                 if (product) {
-                    if (product.discount && product.discount > 0) {
-                        // إذا كان المنتج عليه خصم، الانتقال لصفحة العروض
-                        window.location.href = `offers.html?product=${productId}`;
-                    } else {
-                        // إذا لم يكن عليه خصم، عرض التفاصيل العادية
-                        this.showNotification(`Viewing details for: ${product.name}`, 'info');
-                    }
+                    // يمكن إضافة modal للتفاصيل أو الانتقال لصفحة المنتج
+                    this.showNotification(`Viewing details for: ${product.name}`, 'info');
+                    // window.location.href = `product-details.html?id=${productId}`;
                 }
             });
         });
@@ -495,26 +641,86 @@ class NonaBeautyApp {
                     this.toggleWishlist(product);
                     
                     // تحديث الأيقونة
-                    const isInWishlist = this.wishlist.some(item => item.id === productId);
-                    e.target.closest('.wishlist-btn').innerHTML = `<i class="${isInWishlist ? 'fas' : 'far'} fa-heart"></i>`;
+                    const isInWishlist = this.isInWishlist(productId);
+                    const icon = e.target.closest('.wishlist-btn').querySelector('i');
+                    icon.className = `${isInWishlist ? 'fas' : 'far'} fa-heart`;
                 }
             });
         });
     }
-}
 
-// تهيئة التطبيق عند تحميل DOM
-document.addEventListener('DOMContentLoaded', function() {
-    window.nonaBeautyApp = new NonaBeautyApp();
-    
-    // إخفاء شاشة التحميل
-    setTimeout(() => {
-        const loader = document.getElementById('pageLoader');
-        if (loader) {
-            loader.classList.add('hidden');
+    // تهيئة الصفحة الرئيسية
+    initializeHomePage() {
+        // تحميل الفئات
+        const categoriesGrid = document.getElementById('categoriesGrid');
+        if (categoriesGrid) {
+            const categories = [
+                { id: 'hair', name: 'Hair Care', icon: 'fas fa-air-freshener', description: 'Shampoo, conditioner, hair masks and oils' },
+                { id: 'face', name: 'Skin Care', icon: 'fas fa-gem', description: 'Cleansers, toners, serums and creams' },
+                { id: 'lips', name: 'Lip Products', icon: 'fas fa-kiss-wink-heart', description: 'Lip gloss, lip balm and lipstick' },
+                { id: 'body', name: 'Body Care', icon: 'fas fa-spa', description: 'Shower gel, scrubs, lotion and body butter' },
+                { id: 'perfumes', name: 'Perfumes', icon: 'fas fa-wind', description: 'Elegant fragrances for every occasion' }
+            ];
+
+            categoriesGrid.innerHTML = categories.map(category => `
+                <div class="category-card" data-category="${category.id}">
+                    <div class="category-icon">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <h3>${category.name}</h3>
+                    <p>${category.description}</p>
+                </div>
+            `).join('');
+
+            // إضافة أحداث النقر على الفئات
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const category = card.dataset.category;
+                    window.location.href = `products.html?category=${category}`;
+                });
+            });
         }
-    }, 1000);
-});
+
+        // تحميل المنتجات المميزة
+        const featuredProducts = document.getElementById('featuredProducts');
+        if (featuredProducts) {
+            const featured = this.getFeaturedProducts().slice(0, 6);
+            if (featured.length > 0) {
+                featuredProducts.innerHTML = featured.map(product => 
+                    this.createProductCard(product)
+                ).join('');
+                this.attachProductEventListeners();
+            }
+        }
+
+        // تحميل العروض الخاصة
+        const specialOffers = document.getElementById('specialOffers');
+        if (specialOffers) {
+            const offers = this.getDiscountedProducts().slice(0, 3);
+            if (offers.length > 0) {
+                specialOffers.innerHTML = offers.map(offer => `
+                    <div class="offer-card">
+                        <div class="offer-image">
+                            <img src="${offer.image}" alt="${offer.name}">
+                            <div class="offer-badge">${offer.discount}% OFF</div>
+                        </div>
+                        <div class="offer-content">
+                            <h3>${offer.name}</h3>
+                            <p>${offer.description}</p>
+                            <div class="product-price">
+                                <span class="current-price">${this.formatPrice(offer.price)}</span>
+                                <span class="original-price">${this.formatPrice(offer.originalPrice)}</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="nonaBeautyApp.addToCart(window.nonaBeautyApp.products.find(p => p.id === '${offer.id}'))">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    }
+}
 
 // وظائف مساعدة عالمية
 function formatPrice(price) {
@@ -534,3 +740,26 @@ function hideLoading() {
         loader.classList.add('hidden');
     }
 }
+
+// تهيئة التطبيق عند تحميل DOM
+document.addEventListener('DOMContentLoaded', function() {
+    window.nonaBeautyApp = new NonaBeautyApp();
+    
+    // إخفاء شاشة التحميل
+    setTimeout(() => {
+        hideLoading();
+    }, 1000);
+
+    // تهيئة الصفحة الرئيسية
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        window.nonaBeautyApp.initializeHomePage();
+    }
+});
+
+// معالجة أخطاء الصور
+document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') {
+        e.target.src = 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400';
+    }
+}, true);
+[file content end]
