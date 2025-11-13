@@ -4,9 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nona Beauty - Premium Cosmetics Store</title>
-    <meta name="description" content="Nona Beauty - Complete store for cosmetics, skin and hair care products">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* إضافة الأنماط الأساسية هنا لتجنب مشاكل تحميل CSS */
+        :root {
+            --primary-color: #d63384;
+            --secondary-color: #6f42c1;
+            --accent-color: #20c997;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --muted-text: #6c757d;
+            --white: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* إضافة الأنماط الأساسية الأخرى */
+    </style>
 </head>
 <body class="english">
     <!-- Loading Screen -->
@@ -26,7 +64,11 @@
                     </div>
                 </div>
                 
-                <nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
                     <ul>
                         <li><a href="index.html" class="nav-link active">Home</a></li>
                         <li><a href="products.html" class="nav-link">Products</a></li>
@@ -88,8 +130,8 @@
     <section class="featured-categories">
         <div class="container">
             <h2 class="section-title">Product Categories</h2>
-            <div class="categories-grid">
-                <!-- Categories will be loaded by JavaScript -->
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- سيتم تحميل الفئات بواسطة JavaScript -->
             </div>
         </div>
     </section>
@@ -98,8 +140,11 @@
     <section class="featured-products">
         <div class="container">
             <h2 class="section-title">Best Sellers</h2>
-            <div class="products-grid">
-                <!-- Products will be loaded by JavaScript -->
+            <div class="products-grid" id="featuredProducts">
+                <!-- سيتم تحميل المنتجات بواسطة JavaScript -->
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="products.html" class="btn btn-primary">View All Products</a>
             </div>
         </div>
     </section>
@@ -108,8 +153,8 @@
     <section class="special-offers">
         <div class="container">
             <h2 class="section-title">Special Offers</h2>
-            <div class="offers-grid">
-                <!-- Offers will be loaded by JavaScript -->
+            <div class="offers-grid" id="specialOffers">
+                <!-- سيتم تحميل العروض بواسطة JavaScript -->
             </div>
         </div>
     </section>
@@ -118,11 +163,45 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <!-- Footer content -->
+                <div class="footer-column">
+                    <h3>Nona Beauty</h3>
+                    <p>Your trusted partner in beauty and skincare. We provide high-quality products for your beauty journey.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="offers.html">Offers</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Customer Service</h3>
+                    <ul class="footer-links">
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> info@nonabeauty.com</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Beauty Street, NY 10001</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 Nona Beauty. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- JavaScript Files -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/products.js"></script>
 </body>
