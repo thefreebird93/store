@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Nona Beauty</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="english">
+    <!-- Header (same as index.html) -->
+
+    <main class="products-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Our Products</h1>
+                <p>Discover our complete collection of beauty products</p>
+            </div>
+
+            <!-- Filters and Sorting -->
+            <div class="products-controls">
+                <div class="filters-section">
+                    <button class="filter-toggle" id="filterToggle">
+                        <i class="fas fa-filter"></i>
+                        Filters
+                    </button>
+                    
+                    <div class="filters-panel" id="filtersPanel">
+                        <div class="filter-group">
+                            <h4>Categories</h4>
+                            <div class="category-filters">
+                                <!-- Categories will be loaded by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <div class="price-filter">
+                                <input type="range" id="priceRange" min="0" max="1000" step="10">
+                                <div class="price-values">
+                                    <span id="minPrice">$0</span>
+                                    <span id="maxPrice">$1000</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <h4>Discounts</h4>
+                            <div class="discount-filters">
+                                <label>
+                                    <input type="checkbox" name="discount" value="10"> 10% off or more
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="discount" value="20"> 20% off or more
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="discount" value="30"> 30% off or more
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sorting-section">
+                    <select id="sortSelect" class="sort-select">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name: A-Z</option>
+                        <option value="discount">Best Discount</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-container">
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded by JavaScript -->
+                </div>
+                
+                <div class="load-more">
+                    <button class="btn btn-outline" id="loadMoreBtn">Load More Products</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (same as index.html) -->
+
+    <script src="assets/js/products.js"></script>
+</body>
+</html>
